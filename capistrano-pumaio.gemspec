@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "capistrano-pumaio"
-  s.version = "0.0.18"
+  s.version = "0.0.19"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Leif Ringstad"]
@@ -28,15 +28,9 @@ Gem::Specification.new do |s|
     "lib/capistrano/puma/config.rb",
     "lib/capistrano/puma/monit.rb",
     "lib/capistrano/puma/nginx.rb",
-    "lib/capistrano/puma/runit.rb",
     "templates/monit/puma.conf.erb",
     "templates/nginx/application.conf.erb",
-    "templates/nginx/htpasswd.erb",
-    "templates/runit/config.rb.erb",
-    "templates/runit/control-q.erb",
-    "templates/runit/finish.erb",
-    "templates/runit/log-run.erb",
-    "templates/runit/run.erb"
+    "templates/nginx/htpasswd.erb"
   ]
   s.homepage = "https://github.com/leifcr/capistrano-puma"
   s.licenses = ["MIT"]
