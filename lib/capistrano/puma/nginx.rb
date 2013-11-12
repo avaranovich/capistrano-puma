@@ -52,7 +52,8 @@ Capistrano::Configuration.instance.load do
   namespace :puma do
     namespace :nginx do
       desc "Parses and uploads nginx configuration for this app."
-      task :setup, :roles => :app , :except => { :no_release => true } do
+      task :setup do#, :roles => :app , :except => { :no_release => true } do
+       on roles :app do 
 
         Capistrano::BaseHelper.generate_and_upload_config(fetch(:nginx_local_config), fetch(:nginx_remote_config))
 
@@ -70,25 +71,32 @@ Capistrano::Configuration.instance.load do
 
         # create log path, must sudo since path can have root-only permissions
         run "#{sudo} mkdir -p /var/log/nginx/#{fetch(:application)} && #{sudo} chown root:www-data /var/log/nginx/#{fetch(:application)}"
+       end     
       end
 
       desc "Enable nginx site for the application"
-      task :enable, :roles => :app , :except => { :no_release => true } do
+      task :enable do #, :roles => :app , :except => { :no_release => true } do
+       on roles :app do 
         # symlink to nginx site configuration file
         run("[ -h #{fetch(:nginx_sites_enabled_symlink)} ] || #{sudo} ln -sf #{fetch(:nginx_remote_config)} #{fetch(:nginx_sites_enabled_symlink)}")
+       end
       end
 
       desc "Disable nginx site for the application"
-      task :disable, :roles => :app , :except => { :no_release => true } do
+      task :disable do #, :roles => :app , :except => { :no_release => true } do
+       on roles :app do 
         run("[ ! -h #{fetch(:nginx_sites_enabled_symlink)} ] || #{sudo} rm -f #{fetch(:nginx_sites_enabled_symlink)}")
+       end 
       end
 
       desc "Purge nginx site config for the application"
-      task :purge, :roles => :app , :except => { :no_release => true } do
+      task :purge do #, :roles => :app , :except => { :no_release => true } do
+       on roles :app do 
         run("[ ! -h #{fetch(:nginx_sites_enabled_symlink)} ] || #{sudo} rm -f #{fetch(:nginx_sites_enabled_symlink)}")
         # must restart nginx to make sure site is disabled when config is purge
         run "#{sudo} service nginx restart"
         run "rm -f #{fetch(:nginx_remote_htpasswd)} && rm -f #{fetch(:nginx_remote_config)}"
+       end
       end
 
     end
@@ -96,23 +104,31 @@ Capistrano::Configuration.instance.load do
 
   namespace :nginx do
     desc "Restart nginx"
-    task :restart, :roles => :app , :except => { :no_release => true } do
+    task :restart do
+     on roles :app do # :except => { :no_release => true } do
       run "#{sudo} service nginx restart"
+     end 
     end
 
     desc "Stop nginx"
-    task :stop, :roles => :app , :except => { :no_release => true } do
+    task :stop do
+     on roles :app do #, :except => { :no_release => true } do
       run "#{sudo} service nginx stop"
+     end 
     end
 
     desc "Start nginx"
-    task :start, :roles => :app , :except => { :no_release => true } do
+    task :start do #, :roles => :app , :except => { :no_release => true } do
+     on roles :app do  
       run "#{sudo} service nginx start"
+     end 
     end
 
     desc "Show nginx status"
-    task :status, :roles => :app , :except => { :no_release => true } do
+    task :status do#, :roles => :app , :except => { :no_release => true } do
+     on roles :app do
       run "#{sudo} service nginx status"
+     end 
     end
 
   end

@@ -19,51 +19,66 @@ Capistrano::Configuration.instance(true).load do
   namespace :puma do
     namespace :monit do
       desc "Setup Puma monit-service"
-      task :setup, :roles => [:app, :web, :db] do
+      task :setup do
+       on roles :app do
         # Upload configuration
         Capistrano::BaseHelper::generate_and_upload_config(puma_local_monit_config, File.join(fetch(:monit_available_path), "#{fetch(:puma_runit_service_name)}.conf"))
         # Enable monitor
+       end
       end
     
       desc "Enable monit services for Puma"
-      task :enable, :roles => [:app, :web, :db] do
+      task :enable
+       on roles :app do
         Capistrano::MonitBase::Service.enable("#{fetch(:puma_runit_service_name)}.conf")
+       end
       end
 
       desc "Disable and stop monit services for Puma"
-      task :disable, :roles => [:app, :web, :db] do
+      task :disable
+       on roles :app do
         Capistrano::MonitBase::Service.disable("#{fetch(:puma_runit_service_name)}.conf")
+       end 
       end
 
       desc "Start monit services for Puma (will also try to start the service)"
-      task :start, :roles => [:app, :web, :db] do
+      task :start do
+       on roles :app do 
         Capistrano::MonitBase::Service.command_monit("start", fetch(:puma_monit_service_name))
+       end 
       end
 
       desc "Stop monit services for Puma (will also stop the service)"
-      task :stop, :roles => [:app, :web, :db] do
+      task :stop do
+       on roles :app do 
         Capistrano::MonitBase::Service.command_monit("stop", fetch(:puma_monit_service_name))
+       end 
       end
 
       desc "Restart monit services for Puma"
-      task :restart, :roles => [:app, :web, :db] do
+      task :restart do
+       on roles :app do 
         Capistrano::MonitBase::Service.command_monit("restart", fetch(:puma_monit_service_name))
+       end 
       end
 
       desc "Monitor Puma"
-      task :monitor, :roles => [:app, :web, :db] do
+      task :monitor do
+       on roles :app do 
         Capistrano::MonitBase::Service.command_monit("monitor", fetch(:puma_monit_service_name))
+       end 
       end
 
       desc "Unmonitor Puma"
-      task :unmonitor, :roles => [:app, :web, :db] do
+      task :unmonitor do
+       on roles :app do 
         Capistrano::MonitBase::Service.command_monit("unmonitor", fetch(:puma_monit_service_name))
+       end 
       end
 
       desc "Purge Puma monit configuration"
-      task :unmonitor, :roles => [:app, :web, :db], :on_error => :continue do
+       task :unmonitor :on_error => :continue do
       end      
-
     end
 
   end

@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem "capistrano",     ">= 2.15.5"
+gem "capistrano",     ">= 3.0.0"
 gem 'capistrano-base_helper', ">= 0.0.11"
 
 group :development do
