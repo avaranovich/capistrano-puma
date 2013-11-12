@@ -1,7 +1,7 @@
 require 'capistrano/puma/config'
 require 'capistrano/base_helper/monit_base'
 
-Capistrano::Configuration.instance.load do
+Capistrano::Configuration.instance(:must_exist).load do
 
   # Where your nginx lives. Usually /opt/nginx or /usr/local/nginx for source compiled.
   _cset :nginx_sites_enabled_path, "/etc/nginx/sites-enabled"

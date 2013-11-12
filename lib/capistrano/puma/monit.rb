@@ -4,7 +4,8 @@
 require 'capistrano/puma/config'
 require 'capistrano/base_helper/monit_base'
 
-Capistrano::Configuration.instance(true).load do
+Capistrano::Configuration.instance(:must_exist).load do
+
   after "monit:setup", "puma:monit:setup"
   after "puma:monit:setup", "puma:monit:enable"
   after "puma:monit:enable", "monit:reload"
